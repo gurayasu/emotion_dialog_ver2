@@ -3,9 +3,18 @@
 
 //（初期）日付の変数
 let today = new Date();
-let yesterday = '';
+today = today.toDateString();
 
-let dt = new Date();
+let dt_login = new Date();
+let dt_yesterday = '';
+
+let dt_login_year = dt_login.getFullYear();
+let dt_login_month = dt_login.getMonth()+1;
+let dt_login_date = dt_login.getDate();
+
+let dt_login_full = `${dt_login_year}年${dt_login_month}月${dt_login_date}日`;
+
+let dt_original = new Date();
 let dt_updated = '';
 let dt_updated_past = '';
 let k = 0;
@@ -28,33 +37,34 @@ window.onload = function unlock(){
             alert('Passed.');
             $('body').attr({'style':'visibility:visible!important;'});
 
-            dt_updated =dt.toDateString();
+            dt_updated =dt_original.toDateString();
             localStorage.setItem(dt_updated,1);
 
-            today.setDate(today.getDate()-1);
-            yesterday = today.toDateString();
+            dt_login.setDate(dt_login.getDate()-1);
+            dt_yesterday = dt_login.toDateString();
 
-            if(!(localStorage.getItem(yesterday) === null)){
+            if(!(localStorage.getItem(dt_yesterday) === null)){
             for(let num = 0; num < localStorage.length; num++){
 
                 //if文で連続の日にちだったらの条件分岐を入れる
                 //連続だったら日数カウントして、そうでなければカウントしないようにする
-                dt.setDate(dt.getDate()-num);
-                dt_updated_past = dt.toDateString();
+                dt_original.setDate(dt_original.getDate()-num);
+                dt_updated_past = dt_original.toDateString();
                 if(!(localStorage.getItem(dt_updated_past) === null)){
                 k = localStorage.getItem(dt_updated_past);
                 k = Number(k);
                 login_num = login_num + k;
-                dt = new Date();
+                dt_original = new Date();
                 console.log(dt_updated_past);
                 }
             } 
             console.log(k);
             console.log(localStorage.length);
             console.log(login_num);
-            alert(`${login_num}日連続ログインです！`);
+            alert(`${login_num}日連続ログインです！\n${dt_login_full}の感情を記録しましょう`);
             } else {
-                alert('連続ログイン1日目です！');
+                alert('連続ログイン1日目です！\n${dt_login_full}の感情を記録しましょう');
+                //（今日の日付）の感情を記録しよう！とメッセージ出したい
             }
 
         }else{
@@ -246,6 +256,7 @@ console.log(`hardのmemoは${hard__memo}`);
 console.log(`happyのmemoは${happy__memo}`);
 console.log(`funのmemoは${fun__memo}`);
 
+
 //結果グラフ作成
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
@@ -282,5 +293,23 @@ const html = `
 $('#memo__list').append(html);
 
 $('.wrapper__third').show();
+
+//感情分類変数
+const negative = anger__sum + sad__sum + hard__sum;
+const positive = happy__sum + fun__sum;
+
+//選択した期間の値取得
+const period_selected = document.getElementById('type');
+const period_index = period_selected.selectedIndex;
+const period_text = period_selected[period_index].text;
+console.log(period_text);
+
+//期間（Optionの値）を表示できるようにする
+if (negative > positive){
+    swal(`大変な${period_text}だったね😂\nお疲れ様！`);
+}
+if (negative < positive){
+    swal(`ハッピーな${period_text}だったね😆`);
+}
 
 });
