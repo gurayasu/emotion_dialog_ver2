@@ -1,4 +1,4 @@
-    //（初期）変数定義
+//（初期）変数定義
 //localStorage.clear();
 
 //（初期）日付の変数
@@ -63,7 +63,7 @@ window.onload = function unlock(){
             console.log(login_num);
             alert(`${login_num}日連続ログインです！\n${dt_login_full}の感情を記録しましょう`);
             } else {
-                alert('連続ログイン1日目です！\n${dt_login_full}の感情を記録しましょう');
+                alert(`連続ログイン1日目です！\n${dt_login_full}の感情を記録しましょう`);
                 //（今日の日付）の感情を記録しよう！とメッセージ出したい
             }
 
